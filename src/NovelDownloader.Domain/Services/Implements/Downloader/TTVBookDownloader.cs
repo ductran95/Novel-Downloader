@@ -34,7 +34,7 @@ namespace NovelDownloader.Domain.Services.Implements.Downloader
             _logger.LogInformation("Request book homepage success");
             
             var idElement = bookHomePage.SelectSingleNode("//meta[@name='book_detail']");
-            book.Id = idElement.GetAttributeValue("content", String.Empty);
+            book.Id = idElement.GetAttributeValue("content", string.Empty);
             _logger.LogInformation("Get book id success");
 
             var titleElement = bookHomePage.QuerySelector("div.book-info > h1");
