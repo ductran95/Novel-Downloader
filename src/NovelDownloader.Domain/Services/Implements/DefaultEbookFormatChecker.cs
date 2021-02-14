@@ -72,12 +72,13 @@ namespace NovelDownloader.Domain.Services.Implements
             return ebook;
         }
         
-        public Ebook GetEbook(string bookName, EbookFormatEnum format)
+        public Ebook GetEbook(string bookName, EbookFormatEnum format, string directory = null)
         {
             _logger.LogInformation("Checking ebook file with name {bookName} ...", bookName);
             
             var ext = format.GetDisplayName();
-            var path = Path.Combine(Assembly.GetExecutingAssembly().Location, $"{bookName}.{ext}");
+            var folder = directory ?? Assembly.GetExecutingAssembly().Location;
+            var path = Path.Combine(folder, $"{bookName}.{ext}");
 
             Ebook ebook;
             

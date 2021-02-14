@@ -1,16 +1,15 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using NovelDownloader.Domain.Services.Abstractions;
 
 namespace NovelDownloader.Domain.Aggregators
 {
     public class BNSBook: Book
     {
         public override string Provider => "Bach Ngoc Sach";
-        
-        public override async Task Download(IServiceProvider serviceProvider,CancellationToken cancellationToken=default)
+        public override IBookDownloader GetDownloader(IServiceProvider serviceProvider)
         {
-            throw new System.NotImplementedException();
+            return serviceProvider.GetService<IBookDownloader<BNSBook>>();
         }
     }
 }
