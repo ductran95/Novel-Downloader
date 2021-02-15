@@ -15,15 +15,7 @@ namespace NovelDownloader.Domain.Aggregators
         
         public string Id { get; set; }
         public string Url { get; set; }
-        public string Name { get; set; }
-        public string Author { get; set; }
-        public List<string> Categories { get; set; }
-        public byte[] Cover { get; set; }
-        public string CoverExt { get; set; }
-        
-        public int TotalChapter { get; set; }
-        public BookTypeEnum BookType { get; set; }
-        
+        public BookMetadata Metadata { get; set; }
         public List<Chapter> Chapters { get; set; }
         public Ebook Ebook { get; set; }
 
@@ -36,7 +28,7 @@ namespace NovelDownloader.Domain.Aggregators
             var configManager = serviceProvider.GetService<IConfigManager>();
             
             await downloader.InitBookMetadata(this);
-            this.Ebook = formatChecker.GetEbook(this.Name, format, directory);
+            this.Ebook = formatChecker.GetEbook(this.Metadata.Name, format, directory);
 
             await downloader.InitBookChapters(this);
 
@@ -45,7 +37,7 @@ namespace NovelDownloader.Domain.Aggregators
             await writer.Init(this.Ebook);
             
             // Write cover
-            await writer.WriteCover(this.Ebook, this.Name, this.Author, this.Categories, this.Cover, this.CoverExt);
+            await writer.WriteMetadata(this.Ebook, this.Metadata);
 
             // Write each chapter
             var chapter = this.Chapters[0];
@@ -64,6 +56,8 @@ namespace NovelDownloader.Domain.Aggregators
             // Because the last chapter only be downloaded in for loop
             // So we have to write that chapter after.
             await writer.WriteChapter(this.Ebook, chapter);
+            
+            await writer.WriteLastChapterMetadata(this.Ebook, chapter);
 
             // Build TOC
             await writer.UpdateTOC(this.Ebook);
@@ -112,6 +106,8 @@ namespace NovelDownloader.Domain.Aggregators
             // Because the last chapter only be downloaded in for loop
             // So we have to write that chapter after.
             await writer.WriteChapter(this.Ebook, chapter);
+            
+            await writer.WriteLastChapterMetadata(this.Ebook, chapter);
 
             // Build TOC
             await writer.UpdateTOC(this.Ebook);

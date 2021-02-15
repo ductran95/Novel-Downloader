@@ -25,12 +25,17 @@ namespace NovelDownloader.Domain.Services.Implements.Writer
             throw new System.NotImplementedException();
         }
 
-        public async Task WriteCover(Ebook ebook, string title, string author, IEnumerable<string> categories, byte[] cover, string coverExt)
+        public async Task WriteMetadata(Ebook ebook, BookMetadata metadata)
         {
             throw new System.NotImplementedException();
         }
 
         public async Task WriteChapter(Ebook ebook, Chapter chapter)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task WriteLastChapterMetadata(Ebook ebook, Chapter lastChapter)
         {
             throw new System.NotImplementedException();
         }

@@ -24,6 +24,7 @@ namespace NovelDownloader.Domain.Services.Implements.Downloader
         public async Task InitBookMetadata(Book book)
         {
             _logger.LogInformation("Getting book metadata ...");
+            book.Metadata = new BookMetadata();
             
             var bookHomePageRes = await _httpClient.Get(book.Url);
             var bookHomePage = _htmlParser.Parse(bookHomePageRes).DocumentNode;
@@ -34,21 +35,25 @@ namespace NovelDownloader.Domain.Services.Implements.Downloader
             // _logger.LogInformation("Get book id success");
 
             var titleElement = bookHomePage.QuerySelector("#truyen-title");
-            book.Name = titleElement.InnerText;
+            book.Metadata.Name = titleElement.InnerText;
             _logger.LogInformation("Get book title success");
             
             var authorElement = bookHomePage.QuerySelector("#tacgia > a");
-            book.Author = authorElement.InnerText;
+            book.Metadata.Author = authorElement.InnerText;
             _logger.LogInformation("Get book author success");
             
+            var descriptionElement = bookHomePage.QuerySelector("div.book-info-detail > div.book-intro > p");
+            book.Metadata.Description = descriptionElement.InnerText;
+            _logger.LogInformation("Get book description success");
+            
             var categoryElements = bookHomePage.QuerySelectorAll("#theloai > a");
-            book.Categories = categoryElements.Select(x => x.InnerText).ToList();
+            book.Metadata.Categories = categoryElements.Select(x => x.InnerText).ToList();
             _logger.LogInformation("Get book categories success");
 
             var coverElement = bookHomePage.QuerySelector("#anhbia > img");
             var coverFile = await _httpClient.DownloadFile(coverElement.GetAttributeValue("src", string.Empty));
-            book.Cover = coverFile.Data;
-            book.CoverExt = coverFile.Name.Split(".").Last();
+            book.Metadata.Cover = coverFile.Data;
+            book.Metadata.CoverExt = coverFile.Name.Split(".").Last();
             _logger.LogInformation("Get book cover success");
             
             // var totalChapterElement = bookHomePage.QuerySelector("#j-bookCatalogPage");

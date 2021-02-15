@@ -42,7 +42,7 @@ namespace NovelDownloader.Domain.Services.Implements.Writer
             return string.Empty;
         }
 
-        public async Task WriteCover(Ebook ebook, string title, string author, IEnumerable<string> categories, byte[] cover, string coverExt)
+        public async Task WriteMetadata(Ebook ebook, BookMetadata metadata)
         {
             var docxBook = ebook as DocxEbook;
 
@@ -55,6 +55,15 @@ namespace NovelDownloader.Domain.Services.Implements.Writer
         public async Task WriteChapter(Ebook ebook, Chapter chapter)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task WriteLastChapterMetadata(Ebook ebook, Chapter lastChapter)
+        {
+            var docxBook = ebook as DocxEbook;
+
+            docxBook.Document.CoreProperties["LastChapter"] = lastChapter.Name;
+            docxBook.Document.CoreProperties["LastChapterUrl"] = lastChapter.Url;
+            docxBook.Document.CoreProperties["LastChapterNo"] = lastChapter.Number.ToString();
         }
 
         public async Task UpdateTOC(Ebook ebook)
