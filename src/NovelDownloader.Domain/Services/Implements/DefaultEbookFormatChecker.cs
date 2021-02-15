@@ -52,14 +52,16 @@ namespace NovelDownloader.Domain.Services.Implements
                 case EbookFormatEnum.Docx:
                     ebook = new DocxEbook()
                     {
-                        FilePath = path
+                        FilePath = path,
+                        IsExisted = true
                     };
                     break;
                 
                 case EbookFormatEnum.Epub:
                     ebook = new EpubEbook()
                     {
-                        FilePath = path
+                        FilePath = path,
+                        IsExisted = true
                     };
                     break;
                 
@@ -87,14 +89,16 @@ namespace NovelDownloader.Domain.Services.Implements
                 case EbookFormatEnum.Docx:
                     ebook = new DocxEbook()
                     {
-                        FilePath = path
+                        FilePath = path,
+                        IsExisted = false
                     };
                     break;
                 
                 case EbookFormatEnum.Epub:
                     ebook = new EpubEbook()
                     {
-                        FilePath = path
+                        FilePath = path,
+                        IsExisted = false
                     };
                     break;
                 

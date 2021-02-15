@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NovelDownloader.Domain.Aggregators;
 using NovelDownloader.Domain.Services.Abstractions;
+using Xceed.Words.NET;
 
 namespace NovelDownloader.Domain.Services.Implements.Writer
 {
@@ -17,17 +18,38 @@ namespace NovelDownloader.Domain.Services.Implements.Writer
         
         public async Task Init(Ebook ebook)
         {
-            throw new System.NotImplementedException();
+            var docxBook = ebook as DocxEbook;
+            
+            if (docxBook.IsExisted)
+            {
+                docxBook.Document = DocX.Load(ebook.FilePath);
+            }
+            else
+            {
+                docxBook.Document = DocX.Create(ebook.FilePath);
+            }
         }
 
         public async Task<string> GetLastChapter(Ebook ebook)
         {
-            throw new System.NotImplementedException();
+            var docxBook = ebook as DocxEbook;
+
+            if (ebook.IsExisted)
+            {
+                return docxBook.Document.CoreProperties["LastChapter"];
+            }
+
+            return string.Empty;
         }
 
-        public async Task WriteCover(Ebook ebook)
+        public async Task WriteCover(Ebook ebook, string title, string author, IEnumerable<string> categories, byte[] cover, string coverExt)
         {
-            throw new System.NotImplementedException();
+            var docxBook = ebook as DocxEbook;
+
+            if (!ebook.IsExisted)
+            {
+                
+            }
         }
 
         public async Task WriteChapter(Ebook ebook, Chapter chapter)

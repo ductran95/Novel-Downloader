@@ -14,8 +14,18 @@ namespace NovelDownloader.Domain.Services.Implements
         {
             _logger = logger;
         }
-        
+
+        public async Task<List<BookStyle>> GetBookStyles()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<List<BookStyle>> GetBookStyles(string configFile)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task SaveBookStyles(List<BookStyle> bookStyles)
         {
             throw new System.NotImplementedException();
         }

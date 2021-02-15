@@ -9,7 +9,7 @@ namespace NovelDownloader.Domain.Services.Abstractions
     {
         Task Init(Ebook ebook);
         Task<string> GetLastChapter(Ebook ebook);
-        Task WriteCover(Ebook ebook);
+        Task WriteCover(Ebook ebook, string title, string author, IEnumerable<string> categories, byte[] cover, string coverExt);
         Task WriteChapter(Ebook ebook, Chapter chapter);
         Task UpdateTOC(Ebook ebook);
         Task UpdateStyle(Ebook ebook, IEnumerable<BookStyle> styles);
