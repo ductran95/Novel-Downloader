@@ -79,7 +79,7 @@ namespace NovelDownloader.Domain.Services.Implements
             _logger.LogInformation("Checking ebook file with name {bookName} ...", bookName);
             
             var ext = format.GetDisplayName();
-            var folder = directory ?? Assembly.GetExecutingAssembly().Location;
+            var folder = directory ?? Directory.GetCurrentDirectory();
             var path = Path.Combine(folder, $"{bookName}.{ext}");
 
             Ebook ebook;

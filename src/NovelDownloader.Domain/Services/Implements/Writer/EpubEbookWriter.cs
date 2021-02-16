@@ -20,7 +20,7 @@ namespace NovelDownloader.Domain.Services.Implements.Writer
             throw new System.NotImplementedException();
         }
 
-        public async Task<string> GetLastChapter(Ebook ebook)
+        public async Task<Chapter> GetLastChapter(Ebook ebook)
         {
             throw new System.NotImplementedException();
         }
@@ -46,6 +46,11 @@ namespace NovelDownloader.Domain.Services.Implements.Writer
         }
 
         public async Task UpdateStyle(Ebook ebook, IEnumerable<BookStyle> styles)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task Save(Ebook ebook)
         {
             throw new System.NotImplementedException();
         }

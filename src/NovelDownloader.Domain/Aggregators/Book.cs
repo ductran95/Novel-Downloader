@@ -36,7 +36,7 @@ namespace NovelDownloader.Domain.Aggregators
 
             await writer.Init(this.Ebook);
             
-            // Write cover
+            // Write metadata
             await writer.WriteMetadata(this.Ebook, this.Metadata);
 
             // Write each chapter
@@ -65,6 +65,9 @@ namespace NovelDownloader.Domain.Aggregators
             // Update Style
             var styles = await configManager.GetBookStyles();
             await writer.UpdateStyle(this.Ebook, styles);
+            
+            // Save
+            await writer.Save(this.Ebook);
         }
 
         public virtual async Task Update(IServiceProvider serviceProvider, string path, CancellationToken cancellationToken = default)
@@ -85,7 +88,15 @@ namespace NovelDownloader.Domain.Aggregators
             var lastChapter = await writer.GetLastChapter(this.Ebook);
 
             // Write each chapter from lastChapter
-            var chapter = this.Chapters.FirstOrDefault(x => x.Name.ToLower() == lastChapter.ToLower());
+            var chapter = this.Chapters.FirstOrDefault(x => x.Name.ToLower() == lastChapter.Name?.ToLower());
+            if (chapter == null)
+            {
+                chapter = this.Chapters.FirstOrDefault(x => x.Url.ToLower() == lastChapter.Url?.ToLower());
+            }
+            if (chapter == null)
+            {
+                chapter = this.Chapters.FirstOrDefault(x => x.Number == lastChapter.Number);
+            }
             if (chapter == null)
             {
                 chapter = this.Chapters[0];
@@ -115,6 +126,9 @@ namespace NovelDownloader.Domain.Aggregators
             // Update Style
             var styles = await configManager.GetBookStyles();
             await writer.UpdateStyle(this.Ebook, styles);
+            
+            // Save
+            await writer.Save(this.Ebook);
         }
     }
 }

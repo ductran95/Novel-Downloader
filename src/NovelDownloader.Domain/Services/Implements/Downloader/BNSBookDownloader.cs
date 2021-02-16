@@ -25,6 +25,7 @@ namespace NovelDownloader.Domain.Services.Implements.Downloader
         {
             _logger.LogInformation("Getting book metadata ...");
             book.Metadata = new BookMetadata();
+            book.Metadata.Provider = book.Provider;
             
             var bookHomePageRes = await _httpClient.Get(book.Url);
             var bookHomePage = _htmlParser.Parse(bookHomePageRes).DocumentNode;
@@ -53,7 +54,7 @@ namespace NovelDownloader.Domain.Services.Implements.Downloader
             var coverElement = bookHomePage.QuerySelector("#anhbia > img");
             var coverFile = await _httpClient.DownloadFile(coverElement.GetAttributeValue("src", string.Empty));
             book.Metadata.Cover = coverFile.Data;
-            book.Metadata.CoverExt = coverFile.Name.Split(".").Last();
+            book.Metadata.CoverName = coverFile.Name;
             _logger.LogInformation("Get book cover success");
             
             // var totalChapterElement = bookHomePage.QuerySelector("#j-bookCatalogPage");
