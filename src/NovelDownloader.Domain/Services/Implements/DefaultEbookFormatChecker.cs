@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Reflection;
 using Microsoft.Extensions.Logging;
 using NovelDownloader.Domain.Aggregators;
 using NovelDownloader.Domain.Enums;
@@ -11,10 +10,12 @@ namespace NovelDownloader.Domain.Services.Implements
 {
     public class DefaultEbookFormatChecker: IEbookFormatChecker
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<DefaultEbookFormatChecker> _logger;
 
-        public DefaultEbookFormatChecker(ILogger<DefaultEbookFormatChecker> logger)
+        public DefaultEbookFormatChecker(IServiceProvider serviceProvider, ILogger<DefaultEbookFormatChecker> logger)
         {
+            _serviceProvider = serviceProvider;
             _logger = logger;
         }
         
@@ -68,7 +69,8 @@ namespace NovelDownloader.Domain.Services.Implements
                 default:
                     throw new NotSupportedException("Only support Epub and DocX");
             }
-            
+
+            ebook.ServiceProvider = _serviceProvider;
             _logger.LogInformation("Check ebook file success");
             
             return ebook;

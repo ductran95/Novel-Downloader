@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using NovelDownloader.Domain.DependencyInjection;
 using NovelDownloader.Domain.Enums;
 using NovelDownloader.Domain.Services.Abstractions;
 
 namespace NovelDownloader.Domain.Aggregators
 {
-    public abstract class Book
+    public abstract class Book: DefaultDependency
     {
         public abstract string Provider { get; }
         
@@ -19,20 +20,20 @@ namespace NovelDownloader.Domain.Aggregators
         public List<Chapter> Chapters { get; set; }
         public Ebook Ebook { get; set; }
 
-        public abstract IBookDownloader GetDownloader(IServiceProvider serviceProvider);
+        public abstract IBookDownloader GetDownloader();
 
-        public virtual async Task CreateNew(IServiceProvider serviceProvider, EbookFormatEnum format, string directory = null, CancellationToken cancellationToken = default)
+        public virtual async Task CreateNew(EbookFormatEnum format, string directory = null, CancellationToken cancellationToken = default)
         {
-            var downloader = GetDownloader(serviceProvider);
-            var formatChecker = serviceProvider.GetService<IEbookFormatChecker>();
-            var configManager = serviceProvider.GetService<IConfigManager>();
+            var downloader = GetDownloader();
+            var formatChecker = ServiceProvider.GetService<IEbookFormatChecker>();
+            var configManager = ServiceProvider.GetService<IConfigManager>();
             
             await downloader.InitBookMetadata(this);
             this.Ebook = formatChecker.GetEbook(this.Metadata.Name, format, directory);
 
             await downloader.InitBookChapters(this);
 
-            var writer = this.Ebook.GetWriter(serviceProvider);
+            var writer = this.Ebook.GetWriter();
 
             await writer.Init(this.Ebook);
             
@@ -70,18 +71,18 @@ namespace NovelDownloader.Domain.Aggregators
             await writer.Save(this.Ebook);
         }
 
-        public virtual async Task Update(IServiceProvider serviceProvider, string path, CancellationToken cancellationToken = default)
+        public virtual async Task Update(string path, CancellationToken cancellationToken = default)
         {
-            var downloader = GetDownloader(serviceProvider);
-            var formatChecker = serviceProvider.GetService<IEbookFormatChecker>();
-            var configManager = serviceProvider.GetService<IConfigManager>();
+            var downloader = GetDownloader();
+            var formatChecker = ServiceProvider.GetService<IEbookFormatChecker>();
+            var configManager = ServiceProvider.GetService<IConfigManager>();
             
             await downloader.InitBookMetadata(this);
             this.Ebook = formatChecker.GetEbook(path);
 
             await downloader.InitBookChapters(this);
 
-            var writer = this.Ebook.GetWriter(serviceProvider);
+            var writer = this.Ebook.GetWriter();
 
             await writer.Init(this.Ebook);
 

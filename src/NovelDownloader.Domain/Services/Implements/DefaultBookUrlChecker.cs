@@ -7,10 +7,12 @@ namespace NovelDownloader.Domain.Services.Implements
 {
     public class DefaultBookUrlChecker: IBookUrlChecker
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<DefaultBookUrlChecker> _logger;
 
-        public DefaultBookUrlChecker(ILogger<DefaultBookUrlChecker> logger)
+        public DefaultBookUrlChecker(IServiceProvider serviceProvider, ILogger<DefaultBookUrlChecker> logger)
         {
+            _serviceProvider = serviceProvider;
             _logger = logger;
         }
         
@@ -60,7 +62,8 @@ namespace NovelDownloader.Domain.Services.Implements
                 default:
                     throw new NotSupportedException("Only support TTV and BNS");
             }
-            
+
+            book.ServiceProvider = _serviceProvider;
             _logger.LogInformation("Check book url success!");
 
             return book;

@@ -30,7 +30,7 @@ namespace NovelDownloader.Console
             var format = EbookFormatEnum.Docx;
 
             var book = _urlChecker.CreateBook(url);
-            await book.CreateNew(_serviceProvider, format, cancellationToken: cancellationToken);
+            await book.CreateNew(format, cancellationToken: cancellationToken);
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
