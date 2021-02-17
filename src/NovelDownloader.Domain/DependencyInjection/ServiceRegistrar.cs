@@ -12,15 +12,29 @@ namespace NovelDownloader.Domain.DependencyInjection
         {
             Init();
         }
-        
+
         public static void Init()
         {
             if (ServiceProvider == null)
             {
-                ServiceCollection = new ServiceCollection();
-                ServiceCollection.RegisterServices();
-                ServiceProvider = ServiceCollection.BuildServiceProvider();
+                Init(ServiceCollectionExtension.RegisterServices);
             }
+        }
+        
+        public static void Init(Action<IServiceCollection> registration)
+        {
+            if (ServiceCollection == null)
+            {
+                ServiceCollection = new ServiceCollection();
+            }
+            
+            registration.Invoke(ServiceCollection);
+            ServiceProvider = ServiceCollection.BuildServiceProvider();
+        }
+
+        public static void Init(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
         }
 
         public static void Dispose()

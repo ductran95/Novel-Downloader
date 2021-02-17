@@ -11,13 +11,13 @@ namespace NovelDownloader.Domain.DependencyInjection
     {
         public static IServiceCollection RegisterNovelDownloader(this IServiceCollection serviceCollection)
         {
-            serviceCollection.RegisterServices();
+            RegisterServices(serviceCollection);
             ServiceRegistrar.Dispose();
             
             return serviceCollection;
         }
         
-        public static IServiceCollection RegisterServices(this IServiceCollection serviceCollection)
+        public static void RegisterServices(IServiceCollection serviceCollection)
         {
             serviceCollection
                 .AddSingleton<IBookUrlChecker, DefaultBookUrlChecker>()
@@ -29,8 +29,6 @@ namespace NovelDownloader.Domain.DependencyInjection
                 .AddSingleton<IEbookWriter<DocxEbook>, DocxEbookWriter>()
                 .AddSingleton<IEbookWriter<EpubEbook>, EpubEbookWriter>()
                 .AddSingleton<IConfigManager, DefaultStyleConfigManager>();
-            
-            return serviceCollection;
         }
     }
 }
